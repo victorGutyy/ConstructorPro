@@ -31,7 +31,12 @@ import com.victor.constructorpro.ui.navigation.AppNavigation
 import com.victor.constructorpro.ui.screens.CubicacionScreen
 import com.victor.constructorpro.ui.screens.HomeScreen
 import com.victor.constructorpro.ui.screens.PlaceholderScreen
+import com.victor.constructorpro.ui.screens.TablaVarillasScreen
+import com.victor.constructorpro.ui.screens.SacosCementoScreen
+import com.victor.constructorpro.ui.screens.ConversorUnidadesScreen
+import com.victor.constructorpro.ui.screens.CalculadoraAceroScreen
 import com.victor.constructorpro.ui.screens.DosificacionScreen
+import com.victor.constructorpro.ui.screens.ConversionPaladasScreen
 import com.victor.constructorpro.ui.theme.ConstructorProTheme
 import kotlinx.coroutines.launch
 
@@ -130,38 +135,23 @@ fun AppContainer() {
                 }
 
                 composable(AppNavigation.ROUTE_CONVERSION_PALADAS) {
-                    PlaceholderScreen(
-                        title = "Conversión a Paladas",
-                        navController = navController
-                    )
+                    ConversionPaladasScreen(navController = navController)
                 }
 
                 composable(AppNavigation.ROUTE_SACOS_CEMENTO) {
-                    PlaceholderScreen(
-                        title = "Sacos de Cemento",
-                        navController = navController
-                    )
+                    SacosCementoScreen(navController = navController)
                 }
 
                 composable(AppNavigation.ROUTE_TABLA_VARILLAS) {
-                    PlaceholderScreen(
-                        title = "Tabla de Varillas",
-                        navController = navController
-                    )
+                    TablaVarillasScreen(navController = navController)
                 }
 
                 composable(AppNavigation.ROUTE_CALCULADORA_ACERO) {
-                    PlaceholderScreen(
-                        title = "Calculadora de Acero",
-                        navController = navController
-                    )
+                    CalculadoraAceroScreen(navController = navController)
                 }
 
                 composable(AppNavigation.ROUTE_CONVERSOR_UNIDADES) {
-                    PlaceholderScreen(
-                        title = "Conversor de Unidades",
-                        navController = navController
-                    )
+                    ConversorUnidadesScreen(navController = navController)
                 }
 
                 composable(AppNavigation.ROUTE_HISTORIAL) {

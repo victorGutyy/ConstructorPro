@@ -21,7 +21,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -31,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.victor.constructorpro.domain.usecase.GetDosificacionByPsiUseCase
+import com.victor.constructorpro.domain.usecase.GetDosificacionObraByPsiUseCase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +75,8 @@ fun DosificacionScreen(navController: NavHostController) {
 
             when (uiState) {
                 is DosificacionUiState.Success -> {
-                    val data = (uiState as DosificacionUiState.Success).data
+                    val tecnica = (uiState as DosificacionUiState.Success).tecnica
+                    val obra = (uiState as DosificacionUiState.Success).obra
 
                     Card(
                         modifier = Modifier
@@ -85,11 +86,39 @@ fun DosificacionScreen(navController: NavHostController) {
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Dosificación para ${data.psi} PSI", fontSize = 20.sp)
-                            Text("Cemento: ${data.cementoKg} kg")
-                            Text("Arena: ${data.arenaM3} m³")
-                            Text("Grava: ${data.gravaM3} m³")
-                            Text("Agua: ${data.aguaLitros} litros")
+                            Text(
+                                text = "Dosificación técnica por m³ - ${tecnica.psi} PSI",
+                                fontSize = 20.sp
+                            )
+                            Text("Cemento: ${tecnica.cementoKg} kg")
+                            Text("Arena: ${tecnica.arenaM3} m³")
+                            Text("Grava: ${tecnica.gravaM3} m³")
+                            Text("Agua: ${tecnica.aguaLitros} litros")
+                        }
+                    }
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F9FA)),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "Dosificación práctica de obra",
+                                fontSize = 20.sp
+                            )
+                            Text("Base: 1 bulto de cemento de 50 kg")
+                            Text("Cemento: ${obra.cementoPaladas} paladas")
+                            Text("Arena: ${obra.arenaPaladas} paladas")
+                            Text("Grava: ${obra.gravaPaladas} paladas")
+                            Text("Agua: ${obra.aguaBaldes} baldes")
+
+                            Text(
+                                text = "Nota: valores referenciales basados en medida práctica de obra.",
+                                fontSize = 13.sp,
+                                color = Color.Gray,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
                         }
                     }
                 }
@@ -101,8 +130,7 @@ fun DosificacionScreen(navController: NavHostController) {
                     )
                 }
 
-                DosificacionUiState.Initial -> {
-                }
+                DosificacionUiState.Initial -> Unit
             }
         }
     }
@@ -124,7 +152,8 @@ private fun PsiButton(
 class DosificacionViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DosificacionViewModel(
-            getDosificacionByPsiUseCase = GetDosificacionByPsiUseCase()
+            getDosificacionByPsiUseCase = GetDosificacionByPsiUseCase(),
+            getDosificacionObraByPsiUseCase = GetDosificacionObraByPsiUseCase()
         ) as T
     }
 }
