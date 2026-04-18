@@ -19,26 +19,81 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.victor.constructorpro.data.local.DatabaseProvider
+import com.victor.constructorpro.data.local.HistorialEntity
 import com.victor.constructorpro.domain.usecase.GetDosificacionByPsiUseCase
 import com.victor.constructorpro.domain.usecase.GetDosificacionObraByPsiUseCase
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DosificacionScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     val viewModel: DosificacionViewModel = viewModel(
         factory = DosificacionViewModelFactory()
     )
     val uiState by viewModel.uiState.collectAsState()
+    val lastSaved = remember { mutableSetOf<String>() }
+
+    LaunchedEffect(uiState) {
+        val state = uiState
+        if (state is DosificacionUiState.Success) {
+            val tecnica = state.tecnica
+            val obra = state.obra
+
+            val detalle = """
+                PSI: ${tecnica.psi}
+                Cemento técnico: ${tecnica.cementoKg} kg
+                Arena técnica: ${tecnica.arenaM3} m³
+                Grava técnica: ${tecnica.gravaM3} m³
+                Agua técnica: ${tecnica.aguaLitros} litros
+                Cemento obra: ${obra.cementoPaladas} paladas
+                Arena obra: ${obra.arenaPaladas} paladas
+                Grava obra: ${obra.gravaPaladas} paladas
+                Agua obra: ${obra.aguaBaldes} baldes
+            """.trimIndent()
+
+            if (!lastSaved.contains(detalle)) {
+                lastSaved.add(detalle)
+
+                val dao = DatabaseProvider.getDatabase(context).historialDao()
+
+                coroutineScope.launch {
+                    val fecha = SimpleDateFormat(
+                        "dd/MM/yyyy HH:mm",
+                        Locale.getDefault()
+                    ).format(Date())
+
+                    dao.insert(
+                        HistorialEntity(
+                            tipo = "Dosificación por PSI",
+                            detalle = detalle,
+                            fechaHora = fecha
+                        )
+                    )
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {

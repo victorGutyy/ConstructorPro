@@ -30,20 +30,30 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.victor.constructorpro.data.local.DatabaseProvider
+import com.victor.constructorpro.data.local.HistorialEntity
 import com.victor.constructorpro.domain.usecase.GetDosificacionObraByPsiUseCase
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversionPaladasScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     var cementBagsInput by remember { mutableStateOf("") }
     var selectedPsi by remember { mutableIntStateOf(2500) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -120,6 +130,32 @@ fun ConversionPaladasScreen(navController: NavHostController) {
                         gravaPaladas = base.gravaPaladas * bultos
                         aguaBaldes = base.aguaBaldes * bultos
                         errorMessage = null
+
+                        val detalle = """
+                            Bultos: ${formatNumber(bultos)}
+                            PSI: $selectedPsi
+                            Cemento: ${formatNumber(cementoPaladas)} paladas
+                            Arena: ${formatNumber(arenaPaladas)} paladas
+                            Grava: ${formatNumber(gravaPaladas)} paladas
+                            Agua: ${formatNumber(aguaBaldes)} baldes
+                        """.trimIndent()
+
+                        val dao = DatabaseProvider.getDatabase(context).historialDao()
+
+                        coroutineScope.launch {
+                            val fecha = SimpleDateFormat(
+                                "dd/MM/yyyy HH:mm",
+                                Locale.getDefault()
+                            ).format(Date())
+
+                            dao.insert(
+                                HistorialEntity(
+                                    tipo = "Conversión a Paladas",
+                                    detalle = detalle,
+                                    fechaHora = fecha
+                                )
+                            )
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
