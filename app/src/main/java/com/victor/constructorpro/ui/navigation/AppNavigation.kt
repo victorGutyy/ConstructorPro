@@ -10,4 +10,5 @@ object AppNavigation {
     const val ROUTE_CALCULADORA_ACERO = "calculadora_acero"
     const val ROUTE_CONVERSOR_UNIDADES = "conversor_unidades"
     const val ROUTE_HISTORIAL = "historial"
+    const val ROUTE_NOTAS = "notas"
 }

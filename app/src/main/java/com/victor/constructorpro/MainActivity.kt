@@ -35,6 +35,7 @@ import com.victor.constructorpro.ui.screens.CubicacionScreen
 import com.victor.constructorpro.ui.screens.DosificacionScreen
 import com.victor.constructorpro.ui.screens.HistorialScreen
 import com.victor.constructorpro.ui.screens.HomeScreen
+import com.victor.constructorpro.ui.screens.NotasScreen // 👈 NUEVO
 import com.victor.constructorpro.ui.screens.SacosCementoScreen
 import com.victor.constructorpro.ui.screens.TablaVarillasScreen
 import com.victor.constructorpro.ui.theme.ConstructorProTheme
@@ -90,7 +91,7 @@ fun AppContainer(application: Application) {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "Constructor Pro",
+                            text = "Constructor Pro VG",
                             color = Color.White
                         )
                     },
@@ -119,6 +120,7 @@ fun AppContainer(application: Application) {
                 navController = navController,
                 startDestination = AppNavigation.ROUTE_HOME
             ) {
+
                 composable(AppNavigation.ROUTE_HOME) {
                     HomeScreen(
                         navController = navController,
@@ -156,6 +158,14 @@ fun AppContainer(application: Application) {
 
                 composable(AppNavigation.ROUTE_HISTORIAL) {
                     HistorialScreen(
+                        navController = navController,
+                        application = application
+                    )
+                }
+
+                // 🔥 NUEVA RUTA
+                composable(AppNavigation.ROUTE_NOTAS) {
+                    NotasScreen(
                         navController = navController,
                         application = application
                     )

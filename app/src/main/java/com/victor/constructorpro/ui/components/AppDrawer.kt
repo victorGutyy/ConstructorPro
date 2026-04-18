@@ -28,6 +28,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import com.victor.constructorpro.R
 import com.victor.constructorpro.ui.navigation.AppNavigation
 import kotlinx.coroutines.delay
@@ -53,6 +55,7 @@ fun AppDrawer(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFECEFF1))
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -72,7 +75,7 @@ fun AppDrawer(
 
             Column {
                 Text(
-                    text = "Constructor Pro",
+                    text = "Constructor Pro VG",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF263238)
@@ -99,6 +102,7 @@ fun AppDrawer(
         DrawerItem("Calculadora de Acero", AppNavigation.ROUTE_CALCULADORA_ACERO, currentRoute, onItemSelected)
         DrawerItem("Conversor de Unidades", AppNavigation.ROUTE_CONVERSOR_UNIDADES, currentRoute, onItemSelected)
         DrawerItem("Historial de Cálculos", AppNavigation.ROUTE_HISTORIAL, currentRoute, onItemSelected)
+        DrawerItem("Agenda de Apuntes", AppNavigation.ROUTE_NOTAS, currentRoute, onItemSelected)
     }
 }
 

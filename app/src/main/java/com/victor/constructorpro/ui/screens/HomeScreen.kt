@@ -64,6 +64,8 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        // 🔷 LOGO
         Image(
             painter = painterResource(id = R.drawable.logo_constructor_pro),
             contentDescription = "Logo Constructor Pro",
@@ -73,8 +75,9 @@ fun HomeScreen(
             contentScale = ContentScale.Fit
         )
 
+        // 🔥 FIRMA
         Text(
-            text = "Constructor Pro",
+            text = "Constructor Pro VG",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF263238)
@@ -86,12 +89,11 @@ fun HomeScreen(
             color = Color(0xFF546E7A)
         )
 
+        // 📌 DESCRIPCIÓN
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Column(
@@ -106,7 +108,7 @@ fun HomeScreen(
                 )
 
                 Text(
-                    text = "Usa el menú superior para navegar por todas las funciones o accede rápidamente a las herramientas principales desde aquí.",
+                    text = "Diseñada para uso real en obra: rápida, práctica y precisa.",
                     fontSize = 15.sp,
                     color = Color(0xFF455A64)
                 )
@@ -115,6 +117,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // ⚡ ACCESOS RÁPIDOS
         Text(
             text = "Accesos rápidos",
             fontSize = 20.sp,
@@ -137,6 +140,37 @@ fun HomeScreen(
             text = "Calculadora de Acero",
             onClick = { navController.navigate(AppNavigation.ROUTE_CALCULADORA_ACERO) }
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // 🧱 NUEVA SECCIÓN: TIPS DE OBRA
+        Text(
+            text = "Tips de obra",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF263238),
+            modifier = Modifier.align(Alignment.Start)
+        )
+
+        TipCard(
+            titulo = "Escuadra 3-4-5",
+            descripcion = "Para sacar escuadra: 3m x 4m → diagonal debe dar 5m."
+        )
+
+        TipCard(
+            titulo = "Plomo",
+            descripcion = "Herramienta para verificar la verticalidad exacta de muros y columnas."
+        )
+
+        TipCard(
+            titulo = "Nivel",
+            descripcion = "Burbuja: uso básico. Manguera: distancias largas. Láser: alta precisión."
+        )
+
+        TipCard(
+            titulo = "Consejo",
+            descripcion = "Siempre verifica nivel y escuadra antes de fundir concreto."
+        )
     }
 }
 
@@ -156,6 +190,38 @@ fun QuickAccessButton(
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
         )
+    }
+}
+
+@Composable
+fun TipCard(
+    titulo: String,
+    descripcion: String
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = titulo,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = Color(0xFF0D47A1)
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = descripcion,
+                fontSize = 14.sp,
+                color = Color(0xFF455A64)
+            )
+        }
     }
 }
 
